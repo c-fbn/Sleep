@@ -19,6 +19,5 @@ public class IntroActivity extends MaterialIntroActivity {
         super.onCreate(savedInstanceState);
 
         addSlide(new HelloFragment());
-        addSlide(new ScheduleFragment());
     }
 }
