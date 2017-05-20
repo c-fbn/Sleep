@@ -30,6 +30,17 @@ public class HelloFragment extends SlideFragment {
         return view;
     }
 
+
+    @Override
+    public int backgroundColor() {
+        return R.color.colorBlue;
+    }
+
+    @Override
+    public int buttonsColor() {
+        return R.color.colorBlue;
+    }
+
     @Override
     public boolean canMoveFurther() {
         return true;
@@ -37,7 +48,6 @@ public class HelloFragment extends SlideFragment {
 
     @Override
     public String cantMoveFurtherErrorMessage() {
-        return "no";
-        //return getString(R.string.error_message);
+        return "";
     }
 }

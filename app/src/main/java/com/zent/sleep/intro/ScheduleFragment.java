@@ -25,9 +25,19 @@ public class ScheduleFragment extends SlideFragment {
         this.getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        final View view = inflater.inflate(R.layout.intro_hello, container, false);
+        final View view = inflater.inflate(R.layout.intro_schedule, container, false);
 
         return view;
+    }
+
+    @Override
+    public int backgroundColor() {
+        return R.color.colorDeepPurple;
+    }
+
+    @Override
+    public int buttonsColor() {
+        return R.color.colorDeepPurple;
     }
 
     @Override
@@ -37,7 +47,6 @@ public class ScheduleFragment extends SlideFragment {
 
     @Override
     public String cantMoveFurtherErrorMessage() {
-        return "no";
-        //return getString(R.string.error_message);
+        return "";
     }
 }
