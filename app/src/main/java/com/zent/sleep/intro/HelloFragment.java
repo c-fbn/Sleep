@@ -1,53 +1,47 @@
 package com.zent.sleep.intro;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.EditText;
 
+import com.getkeepsafe.relinker.ReLinker;
+import com.heinrichreimersoftware.materialintro.app.OnNavigationBlockedListener;
+import com.heinrichreimersoftware.materialintro.app.SlideFragment;
+import com.heinrichreimersoftware.materialintro.slide.Slide;
+import com.orhanobut.logger.Logger;
 import com.zent.sleep.R;
 
-import agency.tango.materialintroscreen.SlideFragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
- * Created by Fabian Choi on 5/19/2017.
- * (1) Get user's name
+ * Created by Fabian Choi on 5/20/2017.
  */
 
 public class HelloFragment extends SlideFragment {
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        // Get rid of notification bar
-        this.getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        final View view = inflater.inflate(R.layout.intro_hello, container, false);
+    public HelloFragment() {
 
-        return view;
-    }
-
-
-    @Override
-    public int backgroundColor() {
-        return R.color.colorBlue;
     }
 
     @Override
-    public int buttonsColor() {
-        return R.color.colorBlue;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.intro_hello,
+                container, false);
+        return rootView;
     }
 
     @Override
-    public boolean canMoveFurther() {
-        return true;
-    }
-
-    @Override
-    public String cantMoveFurtherErrorMessage() {
-        return "";
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

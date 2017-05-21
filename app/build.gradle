@@ -19,6 +19,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -33,7 +36,7 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.orhanobut:logger:1.15'
-    compile 'agency.tango.android:material-intro-screen:0.0.5'
+    compile 'com.heinrichreimersoftware:material-intro:1.6.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 }
