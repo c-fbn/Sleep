@@ -6,7 +6,8 @@
 
     <color name="colorNight">#1B286B</color>
     <color name="colorDeepPurple">#512DA8</color>
-    <color name="colorBlue">#1976D2</color>
+    <color name="colorCyan">#0097A7</color>
+    <color name="colorIndigo">#303F9F</color>
     <color name="colorGreen">#388E3C</color>
 
     <color name="black_overlay">#66000000</color>

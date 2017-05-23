@@ -6,13 +6,16 @@ import android.support.v4.view.ViewPager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.heinrichreimersoftware.materialintro.app.NavigationPolicy;
 import com.heinrichreimersoftware.materialintro.app.OnNavigationBlockedListener;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
-import com.heinrichreimersoftware.materialintro.slide.Slide;
-import com.orhanobut.logger.Logger;
+import com.zent.sleep.intro.CustomizeFragment;
+import com.zent.sleep.intro.FinishFragment;
 import com.zent.sleep.intro.HelloFragment;
 import com.zent.sleep.intro.NameFragment;
+import com.zent.sleep.intro.ScheduleFragment;
+import com.zent.sleep.model.User;
+
+import io.realm.Realm;
 
 /**
  * Created by Fabian Choi on 5/19/2017.
@@ -30,7 +33,10 @@ public class IntroActivity extends com.heinrichreimersoftware.materialintro.app.
 
         /* Fragments */
         HelloFragment helloFragment = new HelloFragment();
-        NameFragment nameFragment = new NameFragment();
+        final NameFragment nameFragment = new NameFragment();
+        final ScheduleFragment scheduleFragment = new ScheduleFragment();
+        final CustomizeFragment customizeFragment = new CustomizeFragment();
+        FinishFragment finishFragment = new FinishFragment();
 
         addSlide(new FragmentSlide.Builder()
                 .background(R.color.colorNight)
@@ -39,15 +45,27 @@ public class IntroActivity extends com.heinrichreimersoftware.materialintro.app.
                 .build());
 
         addSlide(new FragmentSlide.Builder()
-                .background(R.color.colorBlue)
-                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorCyan)
+                .backgroundDark(R.color.colorCyan)
                 .fragment(nameFragment)
                 .build());
 
         addSlide(new FragmentSlide.Builder()
                 .background(R.color.colorDeepPurple)
                 .backgroundDark(R.color.colorDeepPurple)
-                .fragment(R.layout.intro_schedule)
+                .fragment(scheduleFragment)
+                .build());
+
+        addSlide(new FragmentSlide.Builder()
+                .background(R.color.colorIndigo)
+                .backgroundDark(R.color.colorIndigo)
+                .fragment(customizeFragment)
+                .build());
+
+        addSlide(new FragmentSlide.Builder()
+                .background(R.color.colorGreen)
+                .backgroundDark(R.color.colorGreen)
+                .fragment(finishFragment)
                 .build());
 
         addOnNavigationBlockedListener(new OnNavigationBlockedListener() {
@@ -61,14 +79,32 @@ public class IntroActivity extends com.heinrichreimersoftware.materialintro.app.
         addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                // Hide keyboard
-                InputMethodManager imm = (InputMethodManager)getSystemService(getApplication().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getContentView().getWindowToken(), 0);
             }
 
             @Override
             public void onPageSelected(int position) {
+                switch (position) {
+                    case 2:
+                        // Hide keyboard
+                        InputMethodManager imm = (InputMethodManager)getSystemService(getApplication().INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(getContentView().getWindowToken(), 0);
 
+                        scheduleFragment.setName(nameFragment.getName());
+                        break;
+                    case 4:
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.beginTransaction();
+                        User user = realm.createObject(User.class);
+                        user.setName(nameFragment.getName());
+                        user.setStartSleepHour(scheduleFragment.getStartHour());
+                        user.setStartSleepMinute(scheduleFragment.getStartMinutes());
+                        user.setEndSleepHour(scheduleFragment.getEndHour());
+                        user.setEndSleepMinute(scheduleFragment.getEndMinutes());
+                        user.setBackgroundMusicEnabled(customizeFragment.isBgMusicChecked());
+                        user.setBreathingEnabled(customizeFragment.isBreathingChecked());
+                        realm.commitTransaction();
+                        break;
+                }
             }
 
             @Override

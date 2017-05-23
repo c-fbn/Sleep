@@ -1,13 +1,11 @@
 package com.zent.sleep.intro;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
@@ -22,10 +20,7 @@ import butterknife.ButterKnife;
 
 public class NameFragment extends SlideFragment {
     @BindView(R.id.introNameEditText) EditText input;
-
-    public NameFragment() {
-
-    }
+    private String name;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +42,7 @@ public class NameFragment extends SlideFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                name = input.getText().toString();
                 updateNavigation();
             }
         });
@@ -61,11 +57,13 @@ public class NameFragment extends SlideFragment {
 
     @Override
     public boolean canGoBackward() {
-        return false;
+        return true;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
+
+    public String getName() { return name; }
 }

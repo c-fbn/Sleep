@@ -9,15 +9,15 @@ import com.heinrichreimersoftware.materialintro.app.SlideFragment;
 import com.zent.sleep.R;
 
 /**
- * Created by Fabian Choi on 5/20/2017.
+ * Created by Fabian Choi on 5/22/2017.
  */
 
-public class HelloFragment extends SlideFragment {
+public class FinishFragment extends SlideFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.intro_hello,
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.intro_finish,
                 container, false);
         return rootView;
     }
@@ -25,5 +25,10 @@ public class HelloFragment extends SlideFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean canGoBackward() {
+        return false;
     }
 }

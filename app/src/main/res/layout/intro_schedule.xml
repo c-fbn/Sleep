@@ -15,58 +15,87 @@
             android:id="@+id/introScheduleImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="256dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginBottom="214dp"
             android:adjustViewBounds="true"
             android:maxWidth="98dp"
             android:scaleType="centerCrop"
+            app:srcCompat="@mipmap/ic_clock"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@mipmap/ic_clock"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.511"
-            app:layout_constraintVertical_bias="0.449" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
-            android:id="@+id/introScheduleText"
+            android:id="@+id/introScheduleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="34dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:text="Ready to sleep at night?\nFirst off, let me get to know you!"
+            android:layout_marginTop="20dp"
+            android:text="Okay {name}, now set up a sleep schedule."
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            app:layout_constraintTop_toBottomOf="@+id/introScheduleImageView"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.083" />
+            app:layout_constraintTop_toBottomOf="@+id/introScheduleImageView" />
 
         <TextView
             android:id="@+id/introScheduleQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:text="What's your name?"
+            android:text="When do you go to sleep?"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="18sp"
+            android:layout_marginTop="38dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintTop_toBottomOf="@+id/introScheduleTextView" />
+
+        <EditText
+            android:id="@+id/introScheduleStartEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/introScheduleText"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp" />
+            android:ems="12"
+            android:hint="Time"
+            android:focusable="false"
+            android:inputType="time"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/introScheduleQuestion" />
+
+        <TextView
+            android:id="@+id/introScheduleQuestion2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="When do you wake up?"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/introScheduleStartEditText" />
+
+        <EditText
+            android:id="@+id/introScheduleEndEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="12"
+            android:hint="Time"
+            android:focusable="false"
+            android:inputType="time"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/introScheduleQuestion2" />
+
 
     </android.support.constraint.ConstraintLayout>
 
