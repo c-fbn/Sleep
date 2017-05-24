@@ -24,16 +24,9 @@ public class SleepActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
-                /*String string = bundle.getString(DownloadService.FILEPATH);
-                int resultCode = bundle.getInt(DownloadService.RESULT);
-                if (resultCode == RESULT_OK) {
-                    Toast.makeText(SleepActivity.this,
-                            "Download complete. Download URI: " + string,
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(SleepActivity.this, "Download failed",
-                            Toast.LENGTH_LONG).show();
-                }*/
+                String title = bundle.getString("title");
+                String subtitle = bundle.getString("subtitle");
+
             }
         }
     };
@@ -56,5 +49,4 @@ public class SleepActivity extends Activity {
         super.onPause();
         unregisterReceiver(receiver);
     }
-
 }
