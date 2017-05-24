@@ -92,7 +92,7 @@ public class IntroActivity extends com.heinrichreimersoftware.materialintro.app.
                         scheduleFragment.setName(nameFragment.getName());
                         break;
                     case 4:
-                        Realm realm = Realm.getDefaultInstance();
+                        Realm realm = Realm.getInstance(com.zent.sleep.Realm.getConfig());
                         realm.beginTransaction();
                         User user = realm.createObject(User.class);
                         user.setName(nameFragment.getName());

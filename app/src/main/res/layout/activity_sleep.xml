@@ -6,11 +6,42 @@
     android:layout_height="match_parent"
     tools:context="com.zent.sleep.SleepActivity">
 
-    <Button
-        android:id="@+id/beep"
+    <ImageView
+        android:id="@+id/sleepImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="198dp"
-        tools:layout_editor_absoluteY="86dp" />
+        android:layout_marginBottom="214dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="98dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@mipmap/ic_logo_white_noborders"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/sleepTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get ready to sleep\nI will help you at 4:06pm!"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/sleepImageView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/sleepProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sleepTextView"/>
 </android.support.constraint.ConstraintLayout>

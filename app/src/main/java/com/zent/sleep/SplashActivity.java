@@ -11,10 +11,6 @@ import com.zent.sleep.model.User;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 public class SplashActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
@@ -34,22 +30,24 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // Start realm
-                /*RealmConfiguration config = new RealmConfiguration.Builder()
-                        .deleteRealmIfMigrationNeeded()
-                        .build();
-                Realm realm = Realm.getInstance(config);*/
-
-                Realm realm = Realm.getDefaultInstance();
+                Realm realm = Realm.getInstance(com.zent.sleep.Realm.getConfig());
 
                 /* Check if new user with database existence */
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                SplashActivity.this.startActivity(intent);
 
                 // Start intro activity if no user exists
                 if(realm.where(User.class).findAll().size() == 0) {
+                    // Delayed start for MainActivity
+                    intent.putExtra("start", false);
+                    SplashActivity.this.startActivity(intent);
+
                     Intent mainIntent = new Intent(SplashActivity.this, IntroActivity.class);
                     SplashActivity.this.startActivity(mainIntent);
+                } else {
+                    intent.putExtra("start", true);
+                    SplashActivity.this.startActivity(intent);
                 }
+
                 overridePendingTransition(0, R.transition.splash_fade_out);
                 SplashActivity.this.finish();
             }

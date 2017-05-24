@@ -1,18 +1,42 @@
 package com.zent.sleep;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.zent.sleep.service.SleepService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SleepActivity extends Activity {
-    @BindView(R.id.beep) Button beepButton;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                /*String string = bundle.getString(DownloadService.FILEPATH);
+                int resultCode = bundle.getInt(DownloadService.RESULT);
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(SleepActivity.this,
+                            "Download complete. Download URI: " + string,
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(SleepActivity.this, "Download failed",
+                            Toast.LENGTH_LONG).show();
+                }*/
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,24 +45,16 @@ public class SleepActivity extends Activity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.beep)
-    public void Beep() {
-        final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.bg_rain);
-        mediaPlayer.setLooping(true);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, new IntentFilter(SleepService.NOTIFICATION));
+    }
 
-        Handler handler = new Handler();
-        Runnable backgroundPlayback = new Runnable() {
-            @Override
-            public void run() {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-            }
-        };
-        final float volume = (float) (1 - (Math.log(0) / Math.log(100)));
-
-        mediaPlayer.setVolume(volume, volume);
-        handler.postDelayed(backgroundPlayback, 10 * 1000);
-        mediaPlayer.start();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
     }
 
 }

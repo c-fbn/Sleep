@@ -1,26 +1,37 @@
 package com.zent.sleep;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+
+import com.orhanobut.logger.Logger;
+import com.zent.sleep.model.Settings;
+import com.zent.sleep.model.User;
+import com.zent.sleep.receiver.NoticeReceiver;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    @BindView(R.id.fab) FloatingActionButton floatingActionButton;
+public class MainActivity extends AppCompatActivity {
+    @BindView(R.id.button) Button goToSleepActivity;
+
+    private boolean delayedStart;
+    private boolean started = false;
+
+    private Realm realm; // Realm instance
+    private User user;
+    private Settings settings;
+
+    private AlarmManager alarmManager;
+    private PendingIntent pendingNoticeIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,81 +39,96 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        delayedStart = !getIntent().getBooleanExtra("start", true);
+        if(!delayedStart) {
+            started = true;
+            start();
+        }
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+    protected void onResume() {
+        super.onResume();
+        // Logic to deal with Splash screen and delaying the start
+        if(delayedStart)
+            delayedStart = false;
+        else {
+            if(!started) {
+                started = true;
+                start();
+            }
+        }
+    }
+
+    public void start() {
+        Logger.d("Started");
+
+        /* Instantiate vars */
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        realm = Realm.getInstance(com.zent.sleep.Realm.getConfig());
+
+        // Get user
+        user = realm.where(User.class).findFirst();
+
+        // Get settings
+        if(realm.where(Settings.class).findAll().size() == 0) {
+            // Create settings
+            realm.beginTransaction();
+            settings = realm.createObject(Settings.class);
+            settings.setEnabled(true);
+            settings.setNightMode(true);
+            realm.commitTransaction();
+
+            // Set up alarms
+            setAlarms();
         } else {
-            super.onBackPressed();
+            settings = realm.where(Settings.class).findFirst();
         }
     }
 
-    @OnClick(R.id.fab)
-    public void OnFabClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        Intent myIntent = new Intent(getBaseContext(), SleepActivity.class);
-        startActivity(myIntent);
+    @OnClick(R.id.button)
+    public void onClickSleepActivity() {
+        enableAlarm(false);
+        enableAlarm(true);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+    /**
+     * Enable the alarm given parameter
+     * @param enable Value to set the enabled state of the alarm
+     */
+    private void enableAlarm(boolean enable) {
+        Logger.d("Set alarm to " + enable);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        if(settings.isEnabled() != enable) {
+            // Update values
+            realm.beginTransaction();
+            settings.setEnabled(enable);
+            realm.commitTransaction();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            // Update alarms
+            if(enable)
+                setAlarms();
+            else
+                alarmManager.cancel(pendingNoticeIntent);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+    private void setAlarms() {
+        Logger.d("Alarms set");
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        Calendar startCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
 
-        } else if (id == R.id.nav_slideshow) {
+        //startCalendar.set(Calendar.HOUR_OF_DAY, user.getStartSleepHour());
+        //startCalendar.set(Calendar.MINUTE, user.getStartSleepMinute());
+        startCalendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+        startCalendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE) + 1);
+        endCalendar.set(Calendar.HOUR_OF_DAY, user.getEndSleepHour());
+        endCalendar.set(Calendar.MINUTE, user.getEndSleepMinute());
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        Intent noticeIntent = new Intent(MainActivity.this, NoticeReceiver.class);
+        pendingNoticeIntent = PendingIntent.getBroadcast(MainActivity.this, 0, noticeIntent, 0);
+        //alarmManager.set(AlarmManager.RTC, startCalendar.getTimeInMillis(), pendingNoticeIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, startCalendar.getTimeInMillis(), pendingNoticeIntent);
     }
 }
