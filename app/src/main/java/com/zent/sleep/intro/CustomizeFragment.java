@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,8 +27,8 @@ public class CustomizeFragment  extends SlideFragment {
     @BindView(R.id.introCustomizeHelpButton) ImageButton helpButton;
     @BindView(R.id.introCustomizeBackgroundCheckBox) CheckBox bgmusic;
     @BindView(R.id.introCustomizeBreathingCheckBox) CheckBox breathing;
-    private boolean bgMusicChecked;
-    private boolean breathingChecked;
+    private boolean bgMusicChecked = true;
+    private boolean breathingChecked = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +51,20 @@ public class CustomizeFragment  extends SlideFragment {
                         })
                         .setIcon(android.R.drawable.ic_menu_help)
                         .show();
+            }
+        });
+
+        bgmusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                bgMusicChecked = b;
+            }
+        });
+
+        breathing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                breathingChecked = b;
             }
         });
 

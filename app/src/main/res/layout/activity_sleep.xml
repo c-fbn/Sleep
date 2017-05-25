@@ -33,6 +33,20 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
+    <TextView
+        android:id="@+id/sleepSubTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get ready to sleep\nI will help you at 4:06pm!"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/sleepTextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
     <ProgressBar
         android:id="@+id/sleepProgressBar"
         style="?android:attr/progressBarStyle"

@@ -37,6 +37,7 @@
             android:enabled="true" />
 
         <receiver android:name=".receiver.NoticeReceiver" />
+        <receiver android:name=".receiver.AlarmReceiver" />
 
     </application>
 
